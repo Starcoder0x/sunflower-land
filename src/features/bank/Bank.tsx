@@ -14,6 +14,7 @@ import { canSync } from "features/game/lib/whitelist";
 import { metamask } from "lib/blockchain/metamask";
 import { Panel } from "components/ui/Panel";
 import { BankModal } from "./components/BankModal";
+import bankMp3 from "../../assets/sound-effects/bank.mp3";
 
 export const Bank: React.FC = () => {
   const { gameService } = useContext(Context);
@@ -23,11 +24,15 @@ export const Bank: React.FC = () => {
 
   const isNotReadOnly = !gameState.matches("readonly");
 
+  const bankAudio = new Audio(bankMp3);
+  bankAudio.volume = 0.3;
+
   const open = () => {
     if (!canSync(metamask.myAccount as string)) {
       setShowComingSoon(true);
       return;
     }
+    bankAudio.play();
     setIsOpen(true);
   };
 
@@ -56,7 +61,7 @@ export const Bank: React.FC = () => {
           className="absolute -bottom-6 left-3 "
           text="Bank"
           icon={token}
-          onClick={() => setIsOpen(true)}
+          onClick={open}
         />
       )}
       <Modal
