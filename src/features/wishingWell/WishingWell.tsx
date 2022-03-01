@@ -11,6 +11,7 @@ import icon from "assets/brand/icon.png";
 import { WishingWellModal } from "./components/WishingWellModal";
 import { GRID_WIDTH_PX } from "features/game/lib/constants";
 import { Action } from "components/ui/Action";
+import wishingWellMp3 from "../../assets/sound-effects/wishing_well.mp3";
 
 export const WishingWell: React.FC = () => {
   const { gameService } = useContext(Context);
@@ -19,6 +20,13 @@ export const WishingWell: React.FC = () => {
 
   const isNotReadOnly = !gameState.matches("readonly");
 
+  const whishingWellAudio = new Audio(wishingWellMp3);
+  whishingWellAudio.volume = 0.5;
+
+  const open = () => {
+    whishingWellAudio.play();
+    setIsOpen(true);
+  };
   return (
     <div
       className="z-10 absolute"
@@ -33,7 +41,7 @@ export const WishingWell: React.FC = () => {
       <img
         src={wishingWell}
         alt="market"
-        onClick={isNotReadOnly ? () => setIsOpen(true) : undefined}
+        onClick={isNotReadOnly ? () => open() : undefined}
         className={classNames("w-full", {
           "cursor-pointer": isNotReadOnly,
           "hover:img-highlight": isNotReadOnly,
@@ -44,7 +52,7 @@ export const WishingWell: React.FC = () => {
           className="absolute -bottom-8 -left-2"
           text="Wish"
           icon={icon}
-          onClick={() => setIsOpen(true)}
+          onClick={() => open()}
         />
       )}
       <Modal centered show={isOpen} onHide={() => setIsOpen(false)}>
