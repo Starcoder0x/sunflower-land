@@ -22,6 +22,8 @@ import {
 import { getTimeLeft } from "lib/utils/time";
 import { ProgressBar } from "components/ui/ProgressBar";
 import { Label } from "components/ui/Label";
+import chopAudio from "../../../assets/sound-effects/chop.mp3";
+import treeFalling from "../../../assets/sound-effects/tree_falling.mp3";
 
 const POPOVER_TIME_MS = 1000;
 
@@ -70,6 +72,11 @@ export const Tree: React.FC<Props> = ({ treeIndex }) => {
     setShowPopover(false);
   };
 
+  const choppingAudio = new Audio(chopAudio);
+  choppingAudio.volume = 0.3;
+  const treeFallingAudio = new Audio(treeFalling);
+  treeFallingAudio.volume = 0.3;
+
   const shake = async () => {
     if (selectedItem !== "Axe") {
       return;
@@ -80,6 +87,7 @@ export const Tree: React.FC<Props> = ({ treeIndex }) => {
       return;
     }
 
+    choppingAudio.play();
     shakeGif.current?.goToAndPlay(0);
 
     setTouchCount((count) => count + 1);
@@ -89,6 +97,7 @@ export const Tree: React.FC<Props> = ({ treeIndex }) => {
 
     // On third shake, chop
     if (touchCount > 0 && touchCount === shakesToBreak) {
+      treeFallingAudio.play();
       chop();
       setTouchCount(0);
     }
